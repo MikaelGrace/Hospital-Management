@@ -1,0 +1,28 @@
+{
+  "id": "3622fc74-16d6-45db-9953-0e2c967bdc97",
+  "name": "HospitalManagement",
+  "publisher": "Default Publisher",
+  "version": "1.0.0.0",
+  "brief": "",
+  "description": "",
+  "privacyStatement": "",
+  "EULA": "",
+  "help": "",
+  "url": "",
+  "logo": "",
+  "dependencies": [],
+  "screenshots": [],
+  "platform": "1.0.0.0",
+  "application": "18.0.0.0",
+  "idRanges": [
+    {
+      "from": 50100,
+      "to": 50149
+    }
+  ],
+  "showMyCode": true,
+  "runtime": "7.0",
+  "features": [
+    "NoImplicitWith"
+  ]
+}
