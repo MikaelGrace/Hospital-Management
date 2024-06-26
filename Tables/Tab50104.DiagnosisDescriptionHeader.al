@@ -63,6 +63,7 @@ table 50113 "Diagnosis Description Header"
                 WardRec: Record Ward;
             begin
                 if "Ward No." <> '' then begin
+                    //WardRec.DeleteAll();
                     WardRec.Reset();
                     WardRec.SetRange("Ward No.", "Ward No.");
                     if WardRec.FindFirst() then
@@ -86,6 +87,11 @@ table 50113 "Diagnosis Description Header"
         {
             DataClassification = ToBeClassified;
         }
+        field(11; "No. Series"; Code[20])
+        {
+            DataClassification = ToBeClassified;
+            TableRelation = "No. Series";
+        }
     }
     keys
     {
@@ -99,12 +105,13 @@ table 50113 "Diagnosis Description Header"
         PatientRec: Record Patient;
         StaffRec: Record Staff;
         DiagnosisDescriptionLineRec: Record "Diagnosis Description Line";
+        NoSeries: Codeunit NoSeriesManagement;
 
-    /*     trigger OnInsert()
-        var
-            WardRec: Record Ward;
-        begin
-            if xRec."Ward No." = Rec."Ward No." then
-                Error('This ward is occupied. Please select another ward');
-        end; */
+    trigger OnInsert()
+
+    begin
+        if Code = '' then
+            NoSeries.InitSeries('DD', xRec."No. Series", 0D, Code, "No. Series");
+    end;
+
 }

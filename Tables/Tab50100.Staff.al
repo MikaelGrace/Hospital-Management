@@ -34,4 +34,14 @@ table 50109 Staff
             Clustered = true;
         }
     }
+    var
+        NoSeries: Codeunit NoSeriesManagement;
+
+    trigger OnInsert()
+
+    begin
+        if "Staff No." = '' then
+            NoSeries.InitSeries('STAFF', xRec."No. Series", 0D, "Staff No.", "No. Series");
+        //Code := NoSeries.GetNextNo('SPT', 0D, false)
+    end;
 }

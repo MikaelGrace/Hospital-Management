@@ -35,4 +35,14 @@ table 50111 Ward
             Clustered = true;
         }
     }
+    var
+        NoSeries: Codeunit NoSeriesManagement;
+
+    trigger OnInsert()
+
+    begin
+        if "Ward No." = '' then
+            NoSeries.InitSeries('WD', xRec."No Series", 0D, "Ward No.", "No Series");
+        //Code := NoSeries.GetNextNo('SPT', 0D, false)
+    end;
 }

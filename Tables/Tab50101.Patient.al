@@ -77,4 +77,13 @@ table 50110 Patient
             Clustered = true;
         }
     }
+    var
+        NoSeries: Codeunit NoSeriesManagement;
+
+    trigger OnInsert()
+
+    begin
+        if "Patient No." = '' then
+            NoSeries.InitSeries('PAT', xRec."No Series", 0D, "Patient No.", "No Series");
+    end;
 }
