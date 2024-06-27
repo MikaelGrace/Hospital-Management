@@ -33,6 +33,10 @@ table 50114 "Diagnosis Description Line"
         {
             DataClassification = ToBeClassified;
         }
+        field(6; Charge; Decimal)
+        {
+            DataClassification = ToBeClassified;
+        }
     }
     keys
     {

@@ -58,18 +58,16 @@ table 50113 "Diagnosis Description Header"
             DataClassification = ToBeClassified;
             TableRelation = Ward;
 
-            trigger OnValidate()
-            var
-                WardRec: Record Ward;
-            begin
-                if "Ward No." <> '' then begin
-                    //WardRec.DeleteAll();
-                    WardRec.Reset();
-                    WardRec.SetRange("Ward No.", "Ward No.");
-                    if WardRec.FindFirst() then
-                        Error('The Ward with No. %1 is currently in use', "Ward No.");
-                end;
-            end;
+            /*             trigger OnValidate()
+                        begin
+                            if "Ward No." <> '' then begin
+                                //WardRec.DeleteAll();
+                                WardRec.Reset();
+                                WardRec.SetRange("Ward No.", "Ward No.");
+                                if WardRec.Get("Ward No.") then
+                                    Error('The Ward with No. %1 is currently in use', "Ward No.");
+                            end;
+                        end; */
         }
         field(9; "Doctor No."; Code[20])
         {
@@ -92,6 +90,10 @@ table 50113 "Diagnosis Description Header"
             DataClassification = ToBeClassified;
             TableRelation = "No. Series";
         }
+        field(12; Status; Enum "Diagnosis Status")
+        {
+            DataClassification = ToBeClassified;
+        }
     }
     keys
     {
@@ -106,6 +108,8 @@ table 50113 "Diagnosis Description Header"
         StaffRec: Record Staff;
         DiagnosisDescriptionLineRec: Record "Diagnosis Description Line";
         NoSeries: Codeunit NoSeriesManagement;
+
+        WardRec: Record Ward;
 
     trigger OnInsert()
 

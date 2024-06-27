@@ -28,6 +28,10 @@ page 50116 "Diagnosis SubForm"
                     ApplicationArea = All;
                     ToolTip = 'Specifies the value of the Description field.', Comment = '%';
                 }
+                field(Charge; Rec.Charge)
+                {
+                    ApplicationArea = All;
+                }
             }
         }
     }

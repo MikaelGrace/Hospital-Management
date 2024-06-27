@@ -65,4 +65,28 @@ page 50118 Patient
             }
         }
     }
+
+    actions
+    {
+        area(Processing)
+        {
+            action("Create Customer")
+            {
+                ApplicationArea = All;
+
+                trigger OnAction()
+                begin
+                    CustomerRec.Init();
+                    CustomerRec."No." := Rec."Patient No.";
+                    CustomerRec.Name := Rec."First Name" + ' ' + Rec."Last Name";
+                    CustomerRec."E-Mail" := Rec."Email Address";
+                    CustomerRec."Phone No." := Rec."Phone Number";
+                    CustomerRec.Insert();
+                end;
+            }
+        }
+    }
+
+    var
+        CustomerRec: Record Customer;
 }

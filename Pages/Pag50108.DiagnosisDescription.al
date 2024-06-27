@@ -3,7 +3,7 @@ page 50115 "Diagnosis Description"
     Caption = 'Diagnosis Description';
     PageType = Document;
     SourceTable = "Diagnosis Description Header";
-
+    Editable = true;
     layout
     {
         area(Content)
@@ -57,6 +57,10 @@ page 50115 "Diagnosis Description"
                     ApplicationArea = All;
                     ToolTip = 'Specifies the value of the ward number field.', Comment = '%';
                 }
+                field(Status; Rec.Status)
+                {
+                    ApplicationArea = All;
+                }
             }
             part(DiagnosisLines; "Diagnosis SubForm")
             {
@@ -65,4 +69,48 @@ page 50115 "Diagnosis Description"
             }
         }
     }
+
+    actions
+    {
+        area(Processing)
+        {
+            action("Close Diagnosis")
+            {
+                Caption = 'Close Diagnosis';
+                Image = Action;
+                ApplicationArea = All;
+                trigger OnAction()
+                begin
+                    Rec.Status := Rec.Status::Closed;
+                    Rec.Modify();
+                    DiagnosisDescriptionDocument.SetRecord(Rec);
+                    CurrPage.Close();
+                    DiagnosisDescriptionDocument.Editable := false;
+                    DiagnosisDescriptionDocument.Run();
+
+                end;
+            }
+            action("Reopen Diagnosis")
+            {
+                ApplicationArea = All;
+
+                trigger OnAction()
+                begin
+                    Rec.Modify();
+                    DiagnosisDescriptionDocument.Editable := true;
+                    DiagnosisDescriptionDocument.Run();
+                end;
+            }
+        }
+    }
+
+    var
+        IsEditable: Boolean;
+        DiagnosisDescriptionDocument: Page "Diagnosis Description";
+
+    trigger OnOpenPage()
+    begin
+        if Rec.Status = Rec.Status::Closed then
+            CurrPage.Editable := false;
+    end;
 }
