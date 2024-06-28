@@ -72,7 +72,8 @@ table 50113 "Diagnosis Description Header"
         field(9; "Doctor No."; Code[20])
         {
             DataClassification = ToBeClassified;
-            TableRelation = Staff;
+            //TableRelation = Staff."Staff No." where (Type = filter("Staff Type"::Doctor))); //for version 10 or higher
+            TableRelation = Staff."Staff No." where(Type = CONST(Doctor));
 
             trigger OnValidate()
 
@@ -93,6 +94,12 @@ table 50113 "Diagnosis Description Header"
         field(12; Status; Enum "Diagnosis Status")
         {
             DataClassification = ToBeClassified;
+        }
+        field(13; "Total Charges"; Decimal)
+        {
+            //DataClassification = ToBeClassified;
+            FieldClass = FlowField;
+            CalcFormula = sum("Diagnosis Description Line".Charge where("Document No." = field(Code)));
         }
     }
     keys

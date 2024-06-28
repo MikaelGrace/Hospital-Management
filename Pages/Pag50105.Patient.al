@@ -52,15 +52,55 @@ page 50118 Patient
                     ApplicationArea = All;
                     ToolTip = 'Specifies the value of the Phone Number field.', Comment = '%';
                 }
-                field("Next of Kin Name"; Rec."Next of Kin Name")
+                field("Balance (LCY)"; Rec."Balance (LCY)")
                 {
-                    ApplicationArea = All;
-                    ToolTip = 'Specifies the value of the Next of Kin Name field.', Comment = '%';
+                    ApplicationArea = Basic, Suite;
+                    ToolTip = 'Specifies the payment amount that the customer owes for completed sales. This value is also known as the customer''s balance.';
+
+                    /*                     trigger OnDrillDown()
+                                        begin
+                                            OpenCustomerLedgerEntries(false);
+                                        end; */
+
                 }
-                field("Next of Kin Contact No"; Rec."Next of Kin Contact No")
+                group("Next of Kin")
                 {
-                    ApplicationArea = All;
-                    ToolTip = 'Specifies the value of the Next of Kin Contact No field.', Comment = '%';
+                    field("Next of Kin Name"; Rec."Next of Kin Name")
+                    {
+                        ApplicationArea = All;
+                        ToolTip = 'Specifies the value of the Next of Kin Name field.', Comment = '%';
+                    }
+                    field("Next of Kin Contact No"; Rec."Next of Kin Contact No")
+                    {
+                        ApplicationArea = All;
+                        ToolTip = 'Specifies the value of the Next of Kin Contact No field.', Comment = '%';
+                    }
+                }
+                group(Invoicing)
+                {
+                    field("Gen. Bus. Posting Group"; Rec."Gen. Bus. Posting Group")
+                    {
+                        ApplicationArea = All;
+                        //FieldPropertyName = FieldPropertyValue;
+                    }
+                    field("VAT Bus. Posting Group"; Rec."VAT Bus. Posting Group")
+                    {
+                        ApplicationArea = All;
+                        //FieldPropertyName = FieldPropertyValue;
+                    }
+                    field("Customer Posting Group"; Rec."Customer Posting Group")
+                    {
+                        ApplicationArea = All;
+                        //FieldPropertyName = FieldPropertyValue;
+                    }
+                }
+                group(Payment)
+                {
+                    field("Payment Terms Code"; Rec."Payment Terms Code")
+                    {
+                        ApplicationArea = All;
+                        //FieldPropertyName = FieldPropertyValue;
+                    }
                 }
             }
         }
@@ -76,12 +116,21 @@ page 50118 Patient
 
                 trigger OnAction()
                 begin
-                    CustomerRec.Init();
-                    CustomerRec."No." := Rec."Patient No.";
-                    CustomerRec.Name := Rec."First Name" + ' ' + Rec."Last Name";
-                    CustomerRec."E-Mail" := Rec."Email Address";
-                    CustomerRec."Phone No." := Rec."Phone Number";
-                    CustomerRec.Insert();
+                    if Confirm('Do you wish to create as a customer', false) then begin
+                        CustomerRec.Init();
+                        CustomerRec."No." := Rec."Patient No.";
+                        CustomerRec.Name := Rec."First Name" + ' ' + Rec."Last Name";
+                        CustomerRec."E-Mail" := Rec."Email Address";
+                        CustomerRec."Phone No." := Rec."Phone Number";
+                        CustomerRec."Gen. Bus. Posting Group" := Rec."Gen. Bus. Posting Group";
+                        CustomerRec."VAT Bus. Posting Group" := Rec."VAT Bus. Posting Group";
+                        CustomerRec."Customer Posting Group" := Rec."Customer Posting Group";
+                        CustomerRec."Payment Terms Code" := Rec."Payment Terms Code";
+                        CustomerRec.Insert();
+                        Message('Patient %1 created as customer with no. %2', Rec."Patient No.", Rec."Patient No.");
+
+                    end;
+                    Page.Run(Page::"Customer List");
                 end;
             }
         }
@@ -89,4 +138,5 @@ page 50118 Patient
 
     var
         CustomerRec: Record Customer;
+        CustomerListPage: Page "Customer List";
 }

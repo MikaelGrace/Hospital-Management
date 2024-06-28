@@ -1,7 +1,7 @@
-page 50120 "Diagnosis Description List"
+page 50120 "Diagnosis Document List"
 {
     ApplicationArea = All;
-    Caption = 'Diagnosis Description List';
+    Caption = 'Diagnosis Document List';
     PageType = List;
     SourceTable = "Diagnosis Description Header";
     UsageCategory = Lists;

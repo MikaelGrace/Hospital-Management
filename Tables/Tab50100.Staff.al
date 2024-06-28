@@ -34,6 +34,12 @@ table 50109 Staff
             Clustered = true;
         }
     }
+    fieldgroups
+    {
+        fieldgroup(DropDown; "Staff No.", "First Name", "Last Name", Type)
+        {
+        }
+    }
     var
         NoSeries: Codeunit NoSeriesManagement;
 

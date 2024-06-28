@@ -1,6 +1,6 @@
-page 50115 "Diagnosis Description"
+page 50115 "Diagnosis Document"
 {
-    Caption = 'Diagnosis Description';
+    Caption = 'Diagnosis Document';
     PageType = Document;
     SourceTable = "Diagnosis Description Header";
     Editable = true;
@@ -46,6 +46,7 @@ page 50115 "Diagnosis Description"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the value of the Doctor No. field.', Comment = '%';
+
                 }
                 field("Doctor Name"; Rec."Doctor Name")
                 {
@@ -56,6 +57,10 @@ page 50115 "Diagnosis Description"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the value of the ward number field.', Comment = '%';
+                }
+                field(Charge; Rec."Total Charges")
+                {
+                    ApplicationArea = All;
                 }
                 field(Status; Rec.Status)
                 {
@@ -72,7 +77,7 @@ page 50115 "Diagnosis Description"
 
     actions
     {
-        area(Processing)
+        area(Navigation)
         {
             action("Close Diagnosis")
             {
@@ -96,9 +101,55 @@ page 50115 "Diagnosis Description"
 
                 trigger OnAction()
                 begin
+                    Rec.Status := Rec.Status::Closed;
                     Rec.Modify();
                     DiagnosisDescriptionDocument.Editable := true;
                     DiagnosisDescriptionDocument.Run();
+                end;
+            }
+
+        }
+        area(Processing)
+        {
+            action("Create Sales Order")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Create a sales order from the diagnosis document';
+                trigger OnAction()
+                var
+                    CustNo: Code[20];
+                    LineNo: Integer;
+                begin
+                    // Set Customer No. here. You can set it based on some field in your Diagnostics Document or statically
+                    // Example customer number
+
+                    // Initialize and insert Sales Header
+                    SalesAndReceivableSetupRec.Get();
+                    SalesHeaderRec.Init();
+                    SalesHeaderRec."Document Type" := SalesHeaderRec."Document Type"::Order;
+                    SalesHeaderRec.Insert(true);
+                    SalesHeaderRec.Validate("Sell-to Customer No.", Rec."Patient No.");
+                    SalesHeaderRec.Modify();
+
+                    // Loop through the Diagnostics Lines and create Sales Lines
+                    DiagnosisDescriptionLineRec.SetRange("Document No.", Rec.Code);
+                    if DiagnosisDescriptionLineRec.FindSet() then
+                        repeat
+                            LineNo += 10000;
+                            SalesLineRec.Init();
+                            SalesLineRec.Validate("Document Type", SalesHeaderRec."Document Type");
+                            SalesLineRec.Validate("Document No.", SalesHeaderRec."No.");
+                            SalesLineRec.Validate(Type, SalesLineRec.Type::"G/L Account"); // Adjust the type based on your need
+                            SalesLineRec.Validate("No.", SalesAndReceivableSetupRec."Service Account");
+                            SalesLineRec.Validate(Description, DiagnosisDescriptionLineRec.Description);
+                            SalesLineRec.Validate(Quantity, 1); // Set the quantity based on your need
+                            SalesLineRec.Validate("Unit Price", DiagnosisDescriptionLineRec.Charge);
+                            SalesLineRec.Validate("Line No.", LineNo);
+                            SalesLineRec.Insert(true);
+                        until DiagnosisDescriptionLineRec.Next() = 0;
+
+                    // Open the created Sales Order
+                    Page.Run(Page::"Sales Order", SalesHeaderRec);
                 end;
             }
         }
@@ -106,7 +157,11 @@ page 50115 "Diagnosis Description"
 
     var
         IsEditable: Boolean;
-        DiagnosisDescriptionDocument: Page "Diagnosis Description";
+        DiagnosisDescriptionDocument: Page "Diagnosis Document";
+        SalesHeaderRec: Record "Sales Header";
+        SalesLineRec: Record "Sales Line";
+        DiagnosisDescriptionLineRec: Record "Diagnosis Description Line";
+        SalesAndReceivableSetupRec: Record "Sales & Receivables Setup";
 
     trigger OnOpenPage()
     begin

@@ -1,7 +1,7 @@
-page 50124 "Diagnosis Descriptions"
+page 50124 "Diagnosis Description List"
 {
     ApplicationArea = All;
-    Caption = 'Diagnosis Descriptions';
+    Caption = 'Diagnosis Description List';
     PageType = List;
     SourceTable = "Diagnosis Description";
     UsageCategory = Lists;
