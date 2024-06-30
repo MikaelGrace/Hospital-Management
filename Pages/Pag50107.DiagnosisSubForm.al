@@ -4,8 +4,8 @@ page 50116 "Diagnosis SubForm"
     PageType = ListPart;
     SourceTable = "Diagnosis Description Line";
     AutoSplitKey = true;
-    ApplicationArea = All;
     UsageCategory = Documents;
+    ApplicationArea = All;
 
     layout
     {

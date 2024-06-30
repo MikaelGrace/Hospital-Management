@@ -114,6 +114,11 @@ table 50110 Patient
             Editable = false;
             FieldClass = FlowField;
         }
+        field(17; "Customer No."; Code[20])
+        {
+            DataClassification = ToBeClassified;
+            Editable = false;
+        }
     }
 
     keys

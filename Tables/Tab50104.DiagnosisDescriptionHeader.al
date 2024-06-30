@@ -12,7 +12,7 @@ table 50113 "Diagnosis Description Header"
         field(2; "Patient No."; Code[20])
         {
             Caption = 'Patient No.';
-            TableRelation = Patient;
+            TableRelation = Patient."Patient No." where("Customer No." = filter(<> ''));
 
             trigger OnValidate()
             begin
@@ -117,6 +117,7 @@ table 50113 "Diagnosis Description Header"
         NoSeries: Codeunit NoSeriesManagement;
 
         WardRec: Record Ward;
+        CustomerRec: Record Customer;
 
     trigger OnInsert()
 

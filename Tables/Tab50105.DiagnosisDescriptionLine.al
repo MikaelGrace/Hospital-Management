@@ -25,8 +25,9 @@ table 50114 "Diagnosis Description Line"
             trigger OnValidate()
 
             begin
-                DiagnosisDescriptionRec.Get("Test No.");
-                Description := DiagnosisDescriptionRec.Description;
+                if DiagnosisDescriptionRec.Get("Test No.") then
+                    Description := DiagnosisDescriptionRec.Description;
+                Charge := DiagnosisDescriptionRec.Amount;
             end;
         }
         field(5; Description; Text[100])

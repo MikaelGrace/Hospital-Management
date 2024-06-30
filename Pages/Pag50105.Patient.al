@@ -52,6 +52,11 @@ page 50118 Patient
                     ApplicationArea = All;
                     ToolTip = 'Specifies the value of the Phone Number field.', Comment = '%';
                 }
+                field("Customer No."; Rec."Customer No.")
+                {
+                    ApplicationArea = All;
+                    //FieldPropertyName = FieldPropertyValue;
+                }
                 field("Balance (LCY)"; Rec."Balance (LCY)")
                 {
                     ApplicationArea = Basic, Suite;
@@ -127,6 +132,7 @@ page 50118 Patient
                         CustomerRec."Customer Posting Group" := Rec."Customer Posting Group";
                         CustomerRec."Payment Terms Code" := Rec."Payment Terms Code";
                         CustomerRec.Insert();
+                        Rec."Customer No." := Rec."Patient No.";
                         Message('Patient %1 created as customer with no. %2', Rec."Patient No.", Rec."Patient No.");
 
                     end;

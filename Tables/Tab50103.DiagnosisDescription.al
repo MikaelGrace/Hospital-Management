@@ -20,6 +20,15 @@ table 50112 "Diagnosis Description"
             DataClassification = ToBeClassified;
             Caption = 'Description';
         }
+        field(4; Amount; Decimal)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(5; "No."; Code[20])
+        {
+            DataClassification = ToBeClassified;
+        }
+
     }
     keys
     {

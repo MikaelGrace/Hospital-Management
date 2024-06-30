@@ -13,4 +13,7 @@ enum 50105 "Diagnosis Type"
     {
         Caption = 'Test';
     }
+    value(3; Drug)
+    {
+    }
 }

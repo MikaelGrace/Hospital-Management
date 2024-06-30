@@ -65,10 +65,12 @@ page 50115 "Diagnosis Document"
                 field(Status; Rec.Status)
                 {
                     ApplicationArea = All;
+                    Editable = false;
                 }
             }
             part(DiagnosisLines; "Diagnosis SubForm")
             {
+                //ApplicationArea = All;
                 SubPageLink = "Document No." = field(Code);
                 UpdatePropagation = Both;
             }
@@ -86,12 +88,18 @@ page 50115 "Diagnosis Document"
                 ApplicationArea = All;
                 trigger OnAction()
                 begin
-                    Rec.Status := Rec.Status::Closed;
-                    Rec.Modify();
-                    DiagnosisDescriptionDocument.SetRecord(Rec);
-                    CurrPage.Close();
-                    DiagnosisDescriptionDocument.Editable := false;
-                    DiagnosisDescriptionDocument.Run();
+                    PatientRec.Get(Rec."Patient No.");
+                    PatientRec.CalcFields("Balance (LCY)");
+                    if PatientRec."Balance (LCY)" = 0 then begin
+                        Rec.Status := Rec.Status::Closed;
+                        Rec.Modify();
+                        DiagnosisDescriptionDocument.SetRecord(Rec);
+                        CurrPage.Close();
+                        DiagnosisDescriptionDocument.Editable := false;
+                        DiagnosisDescriptionDocument.Run();
+                    end
+                    else
+                        Message('Document cannot be closed because Patient %1 is yet to complete payment', Rec."Patient No.");
 
                 end;
             }
@@ -101,7 +109,7 @@ page 50115 "Diagnosis Document"
 
                 trigger OnAction()
                 begin
-                    Rec.Status := Rec.Status::Closed;
+                    Rec.Status := Rec.Status::Open;
                     Rec.Modify();
                     DiagnosisDescriptionDocument.Editable := true;
                     DiagnosisDescriptionDocument.Run();
@@ -139,7 +147,12 @@ page 50115 "Diagnosis Document"
                             SalesLineRec.Init();
                             SalesLineRec.Validate("Document Type", SalesHeaderRec."Document Type");
                             SalesLineRec.Validate("Document No.", SalesHeaderRec."No.");
-                            SalesLineRec.Validate(Type, SalesLineRec.Type::"G/L Account"); // Adjust the type based on your need
+                            if DiagnosisDescriptionLineRec.Type = DiagnosisDescriptionLineRec.Type::Test then
+                                SalesLineRec.Validate(Type, SalesLineRec.Type::"G/L Account"); // Adjust the type based on your need
+                            if DiagnosisDescriptionLineRec.Type = DiagnosisDescriptionLineRec.Type::Treatment then
+                                SalesLineRec.Validate(Type, SalesLineRec.Type::"G/L Account");
+                            if DiagnosisDescriptionLineRec.Type = DiagnosisDescriptionLineRec.Type::Drug then
+                                SalesLineRec.Validate(Type, SalesLineRec.Type::Item);
                             SalesLineRec.Validate("No.", SalesAndReceivableSetupRec."Service Account");
                             SalesLineRec.Validate(Description, DiagnosisDescriptionLineRec.Description);
                             SalesLineRec.Validate(Quantity, 1); // Set the quantity based on your need
@@ -162,6 +175,7 @@ page 50115 "Diagnosis Document"
         SalesLineRec: Record "Sales Line";
         DiagnosisDescriptionLineRec: Record "Diagnosis Description Line";
         SalesAndReceivableSetupRec: Record "Sales & Receivables Setup";
+        PatientRec: Record Patient;
 
     trigger OnOpenPage()
     begin
