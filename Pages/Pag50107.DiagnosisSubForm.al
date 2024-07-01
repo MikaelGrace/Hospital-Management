@@ -32,6 +32,10 @@ page 50116 "Diagnosis SubForm"
                 {
                     ApplicationArea = All;
                 }
+                field("Account No."; Rec."Account No.")
+                {
+                    ApplicationArea = All;
+                }
             }
         }
     }

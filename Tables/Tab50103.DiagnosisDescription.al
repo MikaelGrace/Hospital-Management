@@ -20,13 +20,17 @@ table 50112 "Diagnosis Description"
             DataClassification = ToBeClassified;
             Caption = 'Description';
         }
-        field(4; Amount; Decimal)
+        field(4; Charges; Decimal)
         {
             DataClassification = ToBeClassified;
         }
         field(5; "No."; Code[20])
         {
             DataClassification = ToBeClassified;
+            TableRelation = if (Type = const(Test)) "G/L Account"
+            else if (Type = const(Treatment)) "G/L Account"
+            else if (Type = const(Drug)) Item;
+
         }
 
     }
@@ -37,4 +41,12 @@ table 50112 "Diagnosis Description"
             Clustered = true;
         }
     }
+    fieldgroups
+    {
+        fieldgroup(DropDown; Type, Description)
+        {
+
+        }
+    }
+
 }

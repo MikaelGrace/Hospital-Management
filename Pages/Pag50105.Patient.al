@@ -139,6 +139,29 @@ page 50118 Patient
                     Page.Run(Page::"Customer List");
                 end;
             }
+            action(PaymentRegistration)
+            {
+                ApplicationArea = All;
+                Caption = 'Register Customer Payments';
+                Enabled = Rec."Customer No." <> '';
+                Image = Payment;
+                //The property 'PromotedCategory' can only be set if the property 'Promoted' is set to 'true'
+                //PromotedCategory = Process;
+                RunObject = Page "Payment Registration";
+                RunPageLink = "Source No." = FIELD("Patient No.");
+                ToolTip = 'Process your customer payments by matching amounts received on your bank account with the related unpaid sales invoices, and then post the payments.';
+            }
+            action(Customer)
+            {
+                ApplicationArea = Basic, Suite;
+                Caption = 'Customer';
+                Enabled = Rec."Customer No." <> '';
+                Image = Customer;
+                RunObject = Page "Customer Card";
+                RunPageLink = "No." = FIELD("Customer No.");
+                ShortCutKey = 'Shift+F7';
+                ToolTip = 'View or edit detailed information about the customer on the sales document.';
+            }
         }
     }
 

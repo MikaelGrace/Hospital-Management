@@ -26,8 +26,9 @@ table 50114 "Diagnosis Description Line"
 
             begin
                 if DiagnosisDescriptionRec.Get("Test No.") then
-                    Description := DiagnosisDescriptionRec.Description;
-                Charge := DiagnosisDescriptionRec.Amount;
+                    "Account No." := DiagnosisDescriptionRec."No.";
+                Description := DiagnosisDescriptionRec.Description;
+                Charge := DiagnosisDescriptionRec.Charges;
             end;
         }
         field(5; Description; Text[100])
@@ -37,6 +38,14 @@ table 50114 "Diagnosis Description Line"
         field(6; Charge; Decimal)
         {
             DataClassification = ToBeClassified;
+            Editable = false;
+        }
+        field(7; "Account No."; Code[20])
+        {
+            DataClassification = ToBeClassified;
+            TableRelation = if (Type = const(Test)) "G/L Account"
+            else if (Type = const(Treatment)) "G/L Account"
+            else if (Type = const(Drug)) Item;
         }
     }
     keys

@@ -27,7 +27,7 @@ page 50124 "Diagnosis Description List"
                     ApplicationArea = All;
                     ToolTip = 'Specifies the value of the Description field.', Comment = '%';
                 }
-                field(Amount; Rec.Amount)
+                field(Amount; Rec.Charges)
                 {
                     ApplicationArea = All;
                     //FieldPropertyName = FieldPropertyValue;

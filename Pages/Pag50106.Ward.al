@@ -2,7 +2,7 @@ page 50117 Ward
 {
     Caption = 'Ward';
     PageType = Card;
-    SourceTable = Ward;
+    SourceTable = "Ward Header";
 
     layout
     {
@@ -27,6 +27,21 @@ page 50117 Ward
                     ApplicationArea = All;
                     ToolTip = 'Specifies the value of the Category field.', Comment = '%';
                 }
+                field("Bed Charge"; Rec."Bed Charge")
+                {
+                    ApplicationArea = All;
+
+                }
+                field("No. Of Beds"; Rec."No. Of Beds")
+                {
+                    ApplicationArea = All;
+
+                }
+            }
+            part("WardLines"; "Ward Subform")
+            {
+                SubPageLink = "Document No." = field("Ward No.");
+                UpdatePropagation = Both;
             }
         }
     }

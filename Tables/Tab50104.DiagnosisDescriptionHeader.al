@@ -56,7 +56,7 @@ table 50113 "Diagnosis Description Header"
         field(8; "Ward No."; Code[20])
         {
             DataClassification = ToBeClassified;
-            TableRelation = Ward;
+            TableRelation = "Ward Header";
 
             /*             trigger OnValidate()
                         begin
@@ -116,7 +116,7 @@ table 50113 "Diagnosis Description Header"
         DiagnosisDescriptionLineRec: Record "Diagnosis Description Line";
         NoSeries: Codeunit NoSeriesManagement;
 
-        WardRec: Record Ward;
+        WardRec: Record "Ward Header";
         CustomerRec: Record Customer;
 
     trigger OnInsert()

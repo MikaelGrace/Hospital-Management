@@ -1,4 +1,4 @@
-table 50111 Ward
+table 50111 "Ward Header"
 {
     Caption = 'Ward';
     DataClassification = ToBeClassified;
@@ -27,6 +27,15 @@ table 50111 Ward
             DataClassification = ToBeClassified;
             Caption = 'Category';
         }
+        field(5; "Bed Charge"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(6; "No. Of Beds"; Integer)
+        {
+            DataClassification = ToBeClassified;
+        }
+
     }
     keys
     {
@@ -35,6 +44,14 @@ table 50111 Ward
             Clustered = true;
         }
     }
+
+    fieldgroups
+    {
+        fieldgroup(DropDown; Description, Category)
+        {
+        }
+    }
+
     var
         NoSeries: Codeunit NoSeriesManagement;
 
@@ -45,4 +62,5 @@ table 50111 Ward
             NoSeries.InitSeries('WD', xRec."No Series", 0D, "Ward No.", "No Series");
         //Code := NoSeries.GetNextNo('SPT', 0D, false)
     end;
+
 }

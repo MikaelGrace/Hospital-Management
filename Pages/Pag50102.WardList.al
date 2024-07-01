@@ -3,7 +3,7 @@ page 50121 "Ward List"
     ApplicationArea = All;
     Caption = 'Ward List';
     PageType = List;
-    SourceTable = Ward;
+    SourceTable = "Ward Header";
     UsageCategory = Lists;
     CardPageId = 50117;
 
